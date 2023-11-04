@@ -260,9 +260,22 @@ for class_label in set(Ground_tru):
 # 训练模型：计算每个属性在每个类别中的条件概率
 attribute_probs = {}
 
-            
+# Initialize conditional probabilities to 0 for all attribute values and class labels
 for attr in fwd_selected_features:
-    attribute_probs[attr] = {val: 0 for val in set(sample[attr] for sample in discr_freq_data)}
+    attribute_probs[attr] = {}
+    # for class_label in set(Ground_tru):
+    #     attribute_probs[attr][class_label] = {}
+    for value in range(1, 11):  # Initialize for attribute values '1' to '10'
+        attribute_probs[attr][str(value)] = 0
+
+# Count the occurrences of each attribute value within each class
+# for sample, class_label in zip(discr_freq_data, Ground_tru):
+#     for attr in fwd_selected_features:
+#         value = sample[attr]
+#         attribute_probs[attr][class_label][value] += 1
+            
+# for attr in fwd_selected_features:
+#     attribute_probs[attr] = {val: 0 for val in set(sample[attr] for sample in discr_freq_data)}
 
 # 统计每个类别中每个属性值的计数
 for sample, class_label in zip(discr_freq_data, Ground_tru):

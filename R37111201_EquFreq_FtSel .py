@@ -33,19 +33,44 @@ def equalfrequency(Class, class_index):
         next_point = Splitting_point[-1] + size
         Splitting_point.append(next_point)
 
-    Splitting_intervals = [] #紀錄intervals
-    for i in Splitting_point[:10]:
-        Splitting_intervals.append(Sorted_class[i])
-    Splitting_intervals.append(Sorted_class[213])
+    Splitting_intervals = [0] #紀錄intervals
+    # for i in Splitting_point[:10]:
+    #     Splitting_intervals.append(Sorted_class[i])
+    # Splitting_intervals.append(Sorted_class[213])
+   
 
-    discretized_class = []
-    for value in Class:
-        for j in range(10):
-            if Splitting_point[j] <= Sorted_class.index(value) < Splitting_point[j+1]:
-                 discretized_class.append(j + 1)
-            if value == max(Class):
-                discretized_class.append(10)
-                break
+    discretized_class = Class
+    points_position = {}
+    
+    for i in range(len(Class)):
+        points_position[i] = Class[i]
+    Sorted_class = sorted(points_position.items(), key=lambda x: x[1])
+    for point in Splitting_point[1:10]:
+        Splitting_value = (Sorted_class[point - 1][1] + Sorted_class[point][1]) / 2
+        Splitting_intervals.append(Splitting_value)
+    Splitting_intervals.append(max(Class))
+
+    intervals_num = []
+    for i in range(0,10):
+        intervals = []
+        for j in range(Splitting_point[i], Splitting_point[i+1]):
+            intervals.append(Sorted_class[j][0])
+        intervals_num.append(intervals)
+    
+    for i in range(10):
+        label = intervals_num[i]
+        for j in label:
+            discretized_class[j] = i + 1
+
+
+
+    # for value in Class:
+    #     for j in range(10):
+    #         if Splitting_point[j] <= Sorted_class.index(value) < Splitting_point[j+1]:
+    #              discretized_class.append(j + 1)
+    #         if value == max(Class):
+    #             discretized_class.append(10)
+    #             break
 
     Splitting_str = ["{:.4f}".format(num) for num in Splitting_intervals] # 調整浮點數顯示位數
     class_name = column_names[Attributes[class_index] + 1]  # match column name
